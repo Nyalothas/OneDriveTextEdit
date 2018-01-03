@@ -2,7 +2,7 @@
     "manifest_version": 2,
   
     "name": "Open in Text Editor",
-    "description": "This extension allows the user to open a file from OneDrive inside OneDrive Text Editor.",
+    "description": "Opens a text file from OneDrive inside OneDrive Text Editor.",
     "version": "1.0",
   
     "browser_action": {
