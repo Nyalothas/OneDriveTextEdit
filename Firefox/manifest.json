@@ -3,6 +3,7 @@
   
     "name": "OneDrive Text Edit",
     "description": "Opens a text file from OneDrive inside OneDrive Text Editor.",
+    "author": "Ny'alotha",
     "version": "1.0",
   
 	"icons": { 
