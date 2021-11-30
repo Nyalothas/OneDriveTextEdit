@@ -1,23 +1,27 @@
-chrome.browserAction.onClicked.addListener(function(activeTab){
-    var newURL = "";
+chrome.browserAction.onClicked.addListener(function () {
+	chrome.tabs.query({
+		active: true,
+		lastFocusedWindow: true
+	}, function (tabs) {
+		const oTab = tabs[0]
+			, sQueryString = oTab.url.substring(oTab.url.indexOf('?') + 1)
+			, nCidIndex = sQueryString.indexOf("cid=")
+			, nIdIndex = sQueryString.indexOf("&id=")
+			, nParIdIndex = sQueryString.indexOf("&parId=")
+			;
 
-    chrome.tabs.query({
-        active: true,
-        lastFocusedWindow: true
-    }, function(tabs) {
-        var tab = tabs[0];
+		if (nCidIndex != -1 && nIdIndex != -1 && nParIdIndex != -1) {
+			let cid = "&cid=" + sQueryString.substring(nCidIndex + 4, nIdIndex) // 16
+				, id = "&id=" + sQueryString.substring(nIdIndex + 4, nParIdIndex) // 23
+				, parId = "&parId=" + sQueryString.substring(nParIdIndex + 7, sQueryString.indexOf("&o=OneUp")) // 23
+				, sNewURL = "https://onedrive.live.com/?v=TextFileEditor" + id + cid + parId;
+			;
 
-        var queryString = tab.url.substring(tab.url.indexOf('?') + 1);
-
-        if(queryString.indexOf("cid=") != -1 && queryString.indexOf("&id=") != -1 && queryString.indexOf("&parId=") != -1){
-           
-            var cid = "&cid=" + queryString.substring(queryString.indexOf("cid=") + 4, queryString.indexOf("&id=")); //16
-            var id = "&id=" + queryString.substring(queryString.indexOf("&id=") + 4, queryString.indexOf("&parId=")); //23
-            var parId = "&parId=" + queryString.substring(queryString.indexOf("&parId=") + 7, queryString.indexOf("&o=OneUp")); //23
-           
-            newURL = "https://onedrive.live.com/?v=TextFileEditor" + id + cid + parId;
-            chrome.tabs.create({ url: newURL });
-        }
-    });
-  });
+			chrome.tabs.create({
+				url: sNewURL,
+				cookieStoreId: oTab.cookieStoreId
+			});
+		}
+	});
+});
 
